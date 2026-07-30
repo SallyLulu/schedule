@@ -8,6 +8,10 @@
     "planItems": {
       "2026-07": [
         {
+          "text": "少买书",
+          "done": false
+        },
+        {
           "text": "新计划项",
           "done": false
         }
@@ -17,5 +21,5 @@
   "annualSummary": {
     "2026": "1123"
   },
-  "version": 1785389777083
+  "version": 1785389784859
 }
