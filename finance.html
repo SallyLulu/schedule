@@ -88,6 +88,10 @@ table.tbl .sum-row td{border-top:2px solid var(--border);font-weight:700;backgro
 .pl-add .pl-add-btn{font-size:11px;padding:2px 8px;border-radius:4px;border:1px solid var(--border);cursor:pointer;background:var(--card);color:var(--sub)}
 .empty{text-align:center;color:var(--sub);font-size:13px;padding:24px 0}
 
+
+.collapse-toggle{cursor:pointer;user-select:none}
+.collapse-toggle:hover{opacity:0.7}
+.m-inc-detail,.m-exp-detail,.y-inc-detail,.y-exp-detail{display:none}
 </style>
 </head>
 <body>
@@ -117,12 +121,12 @@ table.tbl .sum-row td{border-top:2px solid var(--border);font-weight:700;backgro
 
       </div>
       <div class="bill-col">
-        <div class="col-hd">当月总结 <button class="pl-btn" onclick="editSummary()">编辑</button></div>
+        <div class="col-hd">月总结 <button class="pl-btn" onclick="editSummary()">编辑</button></div>
         <div id="summaryView" style="font-size:12px;line-height:1.6;white-space:pre-wrap;cursor:pointer" onclick="editSummary()"></div>
         <textarea class="plan-ta" id="summaryEdit" style="display:none;min-height:60px" onblur="saveSummary()" onkeydown="if(event.key==='Enter'&&event.ctrlKey)this.blur()"></textarea>
       </div>
       <div class="bill-col" style="margin-top:12px">
-        <div class="col-hd">下月计划 <button class="pl-btn" onclick="addPlanItem()">+ 添加</button></div>
+        <div class="col-hd">月计划 <button class="pl-btn" onclick="addPlanItem()">+ 添加</button></div>
         <div id="planItemsList"></div>
       </div>
       <div class="bill-col" style="margin-top:12px">
@@ -481,15 +485,15 @@ function renMonth() {
   document.getElementById('mBalance').textContent = (incomeTotal - expenseTotal).toFixed(2);
 
   var tbody = document.getElementById('monthBody');
-  var h = '<tr class="sum-row"><td>收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
+  var h = '<tr class="sum-row collapse-toggle" onclick="toggleCollapse('m-inc-detail','mIncIcon')"><td><span id="mIncIcon">▶</span> 收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
   INCOME_SUB.forEach(function(c){
     var v = totals[c] || 0;
-    if (v > 0) h += '<tr><td style="padding-left:20px;color:var(--income)">'+c+'</td><td style="text-align:right;color:var(--income)">'+v.toFixed(2)+'</td></tr>';
+    if (v > 0) h += '<tr class="m-inc-detail" style="display:none"><td style="padding-left:20px;color:var(--income)">'+c+'</td><td style="text-align:right;color:var(--income)">'+v.toFixed(2)+'</td></tr>';
   });
-  h += '<tr class="sum-row"><td>支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
+  h += '<tr class="sum-row collapse-toggle" onclick="toggleCollapse('m-exp-detail','mExpIcon')"><td><span id="mExpIcon">▶</span> 支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
   EXPENSE_SUB.forEach(function(c){
     var v = totals[c] || 0;
-    if (v > 0) h += '<tr><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
+    if (v > 0) h += '<tr class="m-exp-detail" style="display:none"><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
   });
   tbody.innerHTML = h;
 
@@ -506,7 +510,7 @@ function renMonthPlan(y, m) {
 
   // Summary
   var summary = plans.summary[key] || '';
-  document.getElementById('summaryView').textContent = summary || '点击编辑当月总结…';
+  document.getElementById('summaryView').textContent = summary || '点击编辑月总结…';
   document.getElementById('summaryView').style.color = summary ? 'var(--text)' : 'var(--sub)';
   document.getElementById('summaryEdit').value = summary;
 
@@ -630,15 +634,15 @@ function renYear() {
   document.getElementById('yBalance').textContent = (incomeTotal - expenseTotal).toFixed(2);
 
   var tbody = document.getElementById('yearBody');
-  var h = '<tr class="sum-row"><td>收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
+  var h = '<tr class="sum-row collapse-toggle" onclick="toggleCollapse('y-inc-detail','yIncIcon')"><td><span id="yIncIcon">▶</span> 收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
   INCOME_SUB.forEach(function(c){
     var v = totals[c] || 0;
-    if (v > 0) h += '<tr><td style="padding-left:20px;color:var(--income)">'+c+'</td><td style="text-align:right;color:var(--income)">'+v.toFixed(2)+'</td></tr>';
+    if (v > 0) h += '<tr class="y-inc-detail" style="display:none"><td style="padding-left:20px;color:var(--income)">'+c+'</td><td style="text-align:right;color:var(--income)">'+v.toFixed(2)+'</td></tr>';
   });
-  h += '<tr class="sum-row"><td>支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
+  h += '<tr class="sum-row collapse-toggle" onclick="toggleCollapse('y-exp-detail','yExpIcon')"><td><span id="yExpIcon">▶</span> 支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
   EXPENSE_SUB.forEach(function(c){
     var v = totals[c] || 0;
-    if (v > 0) h += '<tr><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
+    if (v > 0) h += '<tr class="y-exp-detail" style="display:none"><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
   });
   tbody.innerHTML = h;
   // Load annual summary
@@ -663,6 +667,16 @@ function saveAnnualSummary() {
 // ===== Plan (Card 3 - Financial Plan) =====
 
 
+
+
+function toggleCollapse(cls, iconId) {
+  var rows = document.querySelectorAll('.' + cls);
+  var icon = document.getElementById(iconId);
+  if (!rows.length || !icon) return;
+  var hidden = rows[0].style.display === 'none';
+  rows.forEach(function(r){ r.style.display = hidden ? '' : 'none'; });
+  icon.textContent = hidden ? '▼' : '▶';
+}
 
 // ===== Utils =====
 function esc(s) {
