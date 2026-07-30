@@ -686,8 +686,8 @@ function saveAnnualSummary() {
 function toggleCollapse(cls, iconId) {
   var rows = document.querySelectorAll('.' + cls);
   if (!rows.length) return;
-  var hidden = rows[0].style.display === 'none';
-  rows.forEach(function(r){ r.style.display = hidden ? '' : 'none'; });
+  var hidden = rows[0].style.display === 'none' || rows[0].style.display === '';
+  rows.forEach(function(r){ r.style.display = hidden ? 'table-row' : 'none'; });
   var icon = document.getElementById(iconId);
   if (icon) icon.textContent = hidden ? '▼' : '▶';
 }

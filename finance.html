@@ -673,8 +673,8 @@ function toggleCollapse(cls, iconId) {
   var rows = document.querySelectorAll('.' + cls);
   var icon = document.getElementById(iconId);
   if (!rows.length || !icon) return;
-  var hidden = rows[0].style.display === 'none';
-  rows.forEach(function(r){ r.style.display = hidden ? '' : 'none'; });
+  var hidden = rows[0].style.display === 'none' || rows[0].style.display === '';
+  rows.forEach(function(r){ r.style.display = hidden ? 'table-row' : 'none'; });
   icon.textContent = hidden ? '▼' : '▶';
 }
 
