@@ -30,6 +30,12 @@
         "cat2": "零食",
         "item": "薯片",
         "amount": 3.5
+      },
+      {
+        "cat1": "支出",
+        "cat2": "食物",
+        "item": "dinner",
+        "amount": 9
       }
     ]
   },
@@ -54,5 +60,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1785390072139
+  "version": 1785390090355
 }
