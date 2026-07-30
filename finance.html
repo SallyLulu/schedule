@@ -91,6 +91,7 @@ table.tbl .sum-row td{border-top:2px solid var(--border);font-weight:700;backgro
 
 .collapse-toggle{cursor:pointer;user-select:none}
 .collapse-toggle:hover{opacity:0.7}
+.highlight-row{outline:2px solid var(--accent);outline-offset:-2px;border-radius:4px}
 .m-inc-detail,.m-exp-detail,.y-inc-detail,.y-exp-detail{display:none}
 </style>
 </head>
@@ -493,7 +494,7 @@ function renMonth() {
   h += '<tr class="sum-row collapse-toggle" onclick="toggleCollapse(&#39;m-exp-detail&#39;,&#39;mExpIcon&#39;)"><td><span id="mExpIcon">▶</span> 支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
   EXPENSE_SUB.forEach(function(c){
     var v = totals[c] || 0;
-    if (v > 0) h += '<tr class="m-exp-detail" style="display:none"><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
+    if (v > 0) h += '<tr class="m-exp-detail" style="display:none" onclick="toggleHighlight(this)"><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
   });
   tbody.innerHTML = h;
 
@@ -642,7 +643,7 @@ function renYear() {
   h += '<tr class="sum-row collapse-toggle" onclick="toggleCollapse(&#39;y-exp-detail&#39;,&#39;yExpIcon&#39;)"><td><span id="yExpIcon">▶</span> 支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
   EXPENSE_SUB.forEach(function(c){
     var v = totals[c] || 0;
-    if (v > 0) h += '<tr class="y-exp-detail" style="display:none"><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
+    if (v > 0) h += '<tr class="y-exp-detail" style="display:none" onclick="toggleHighlight(this)"><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
   });
   tbody.innerHTML = h;
   // Load annual summary
@@ -668,6 +669,10 @@ function saveAnnualSummary() {
 
 
 
+
+function toggleHighlight(el) {
+  el.classList.toggle('highlight-row');
+}
 
 function toggleCollapse(cls, iconId) {
   var rows = document.querySelectorAll('.' + cls);
