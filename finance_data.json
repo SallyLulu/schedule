@@ -1,12 +1,21 @@
 {
   "ledger": {},
   "plans": {
-    "summary": {},
+    "summary": {
+      "2026-07": ""
+    },
     "nextPlan": {},
-    "planItems": {}
+    "planItems": {
+      "2026-07": [
+        {
+          "text": "新计划项",
+          "done": false
+        }
+      ]
+    }
   },
   "annualSummary": {
     "2026": "1123"
   },
-  "version": 1785389758848
+  "version": 1785389777083
 }
