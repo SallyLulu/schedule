@@ -148,12 +148,16 @@ table.tbl th{padding:8px 8px}
     <div class="empty" id="ledgerEmpty">暂无记录，请在下方添加</div>
   </div>
   <div class="add-row">
-    <input type="date" id="ldDate" style="width:130px">
-    <select id="ldCat1"><option value="支出">支出</option><option value="收入">收入</option></select>
-    <select id="ldCat2"></select>
-    <input type="text" id="ldItem" placeholder="事项" style="width:100px">
-    <input type="number" id="ldAmt" placeholder="金额" step="0.01" style="width:80px">
-    <button class="ab" onclick="addLedger()">+</button>
+    <div style="display:flex;gap:8px;align-items:center;width:100%">
+      <input type="date" id="ldDate" style="flex:1;min-width:0">
+      <select id="ldCat1"><option value="支出">支出</option><option value="收入">收入</option></select>
+      <select id="ldCat2" style="flex:1;min-width:0"></select>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;width:100%">
+      <input type="text" id="ldItem" placeholder="事项" style="flex:1;min-width:0">
+      <input type="number" id="ldAmt" placeholder="金额" step="0.01" style="width:80px;flex-shrink:0">
+      <button class="ab" onclick="addLedger()" style="flex-shrink:0">+</button>
+    </div>
   </div>
 </div>
 
