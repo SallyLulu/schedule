@@ -1,0 +1,27 @@
+{
+  "ledger": {
+    "2026-07-30": [
+      {
+        "cat1": "支出",
+        "cat2": "食物",
+        "item": "lunch",
+        "amount": 19.8
+      },
+      {
+        "cat1": "收入",
+        "cat2": "其他",
+        "item": "1",
+        "amount": 1
+      }
+    ]
+  },
+  "plans": {
+    "summary": {
+      "2026-07": "！少买书\n！暂时用不到的东西不买"
+    },
+    "nextPlan": {},
+    "planItems": {}
+  },
+  "annualSummary": {},
+  "version": 1785387977638
+}
