@@ -485,12 +485,12 @@ function renMonth() {
   document.getElementById('mBalance').textContent = (incomeTotal - expenseTotal).toFixed(2);
 
   var tbody = document.getElementById('monthBody');
-  var h = '<tr class="sum-row collapse-toggle" onclick="toggleCollapse('m-inc-detail','mIncIcon')"><td><span id="mIncIcon">▶</span> 收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
+  var h = '<tr class="sum-row collapse-toggle" onclick="toggleCollapse(&#39;m-inc-detail&#39;,&#39;mIncIcon&#39;)"><td><span id="mIncIcon">▶</span> 收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
   INCOME_SUB.forEach(function(c){
     var v = totals[c] || 0;
     if (v > 0) h += '<tr class="m-inc-detail" style="display:none"><td style="padding-left:20px;color:var(--income)">'+c+'</td><td style="text-align:right;color:var(--income)">'+v.toFixed(2)+'</td></tr>';
   });
-  h += '<tr class="sum-row collapse-toggle" onclick="toggleCollapse('m-exp-detail','mExpIcon')"><td><span id="mExpIcon">▶</span> 支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
+  h += '<tr class="sum-row collapse-toggle" onclick="toggleCollapse(&#39;m-exp-detail&#39;,&#39;mExpIcon&#39;)"><td><span id="mExpIcon">▶</span> 支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
   EXPENSE_SUB.forEach(function(c){
     var v = totals[c] || 0;
     if (v > 0) h += '<tr class="m-exp-detail" style="display:none"><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
@@ -634,12 +634,12 @@ function renYear() {
   document.getElementById('yBalance').textContent = (incomeTotal - expenseTotal).toFixed(2);
 
   var tbody = document.getElementById('yearBody');
-  var h = '<tr class="sum-row collapse-toggle" onclick="toggleCollapse('y-inc-detail','yIncIcon')"><td><span id="yIncIcon">▶</span> 收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
+  var h = '<tr class="sum-row collapse-toggle" onclick="toggleCollapse(&#39;y-inc-detail&#39;,&#39;yIncIcon&#39;)"><td><span id="yIncIcon">▶</span> 收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
   INCOME_SUB.forEach(function(c){
     var v = totals[c] || 0;
     if (v > 0) h += '<tr class="y-inc-detail" style="display:none"><td style="padding-left:20px;color:var(--income)">'+c+'</td><td style="text-align:right;color:var(--income)">'+v.toFixed(2)+'</td></tr>';
   });
-  h += '<tr class="sum-row collapse-toggle" onclick="toggleCollapse('y-exp-detail','yExpIcon')"><td><span id="yExpIcon">▶</span> 支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
+  h += '<tr class="sum-row collapse-toggle" onclick="toggleCollapse(&#39;y-exp-detail&#39;,&#39;yExpIcon&#39;)"><td><span id="yExpIcon">▶</span> 支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
   EXPENSE_SUB.forEach(function(c){
     var v = totals[c] || 0;
     if (v > 0) h += '<tr class="y-exp-detail" style="display:none"><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
