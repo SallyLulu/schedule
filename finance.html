@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>纱纱的账本</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#e8eee0;--card:#f2f5ed;--text:#5d6b55;--sub:#8a9582;
+--border:#cdd8c2;--hover:#e4ece0;--accent:#6b8658;--accent2:#5a704a;
+--income:#7a9a6a;--expense:#b89070;--highlight:#c8d5b8;
+--income-bg:#edf5e5;--expense-bg:#f5ede5;
+--shadow:rgba(0,0,0,0.04)}
+html,body{width:100%;min-height:100%;background:var(--bg);color:var(--text);font-family:"PingFang SC","Helvetica Neue",sans-serif}
+body{padding:28px 36px}
+.page{max-width:1400px;margin:0 auto}
+.hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.hd h1{font-size:26px;font-weight:700;letter-spacing:1px;color:var(--text)}
+.hd-sync{font-size:13px;padding:5px 16px;border-radius:14px;background:var(--card);color:var(--sub);box-shadow:0 1px 3px var(--shadow);cursor:pointer;border:1px solid var(--border)}
+
+
+
+.c{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 1px 4px var(--shadow)}
+.c.c2{display:flex;flex-direction:column}
+.c .plan-ta{flex:1}
+.c .c2-body{flex:1;display:flex;flex-direction:column;min-height:0}
+.c .c2-body .tbl-wrap{flex:1;margin-bottom:4px}
+.c .c2-body .empty{margin:0}
+
+.c4{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 1px 4px var(--shadow);margin-bottom:18px}
+.st{font-size:16px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--text);flex-wrap:wrap}
+.st .sub{font-size:13px;font-weight:400;color:var(--sub)}
+.st .val{font-size:15px;font-weight:600}
+.st .val.in{color:var(--income)}
+.st .val.ex{color:var(--expense)}
+.st .val.bl{color:var(--accent2)}
+.btn{border:1px solid var(--border);background:var(--card);color:var(--sub);font-size:13px;padding:5px 14px;border-radius:8px;cursor:pointer}
+.btn:active{background:var(--hover)}
+.btn.ac{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cal-sels{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.cal-sels select{border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:13px;background:#fff;color:var(--text);outline:none;font-family:inherit}
+.cal-sels select:focus{border-color:var(--accent)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:13px}
+.cal-grid .dn{padding:4px 0;color:var(--sub);font-size:12px;font-weight:500}
+.cal-grid .dc{padding:6px 0;cursor:pointer;border-radius:6px;position:relative;font-size:13px}
+.cal-grid .dc:hover{background:var(--hover)}
+.cal-grid .dc.sel{background:var(--accent);color:#fff;font-weight:700}
+.cal-grid .dc.td{background:var(--highlight);font-weight:700}
+.cal-grid .dc.om{color:#d5d9d0}
+.tbl-wrap{overflow-x:auto;margin-bottom:8px}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px}
+table.tbl th{padding:7px 8px;text-align:left;font-weight:600;color:var(--sub);font-size:12px;border-bottom:1px solid var(--border);white-space:nowrap}
+table.tbl td{padding:6px 8px;border-bottom:1px solid #e8eee0;font-size:13px}
+table.tbl tr:last-child td{border-bottom:none}
+table.tbl .in{color:var(--income)}
+table.tbl .ex{color:var(--expense)}
+table.tbl tr.income-row td{background:var(--income-bg)}
+table.tbl tr.expense-row td{background:var(--expense-bg)}
+table.tbl .sum-row td{border-top:2px solid var(--border);font-weight:700;background:var(--hover)}
+.add-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.add-row select,.add-row input{border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:13px;background:#fff;color:var(--text);outline:none;font-family:inherit}
+.add-row select:focus,.add-row input:focus{border-color:var(--accent)}
+.add-row .ab{border:none;background:var(--accent);color:#fff;border-radius:6px;padding:6px 16px;font-size:14px;cursor:pointer;font-weight:600}
+.add-row .ab:active{background:var(--accent2)}
+.plan-ta{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px;font-size:14px;font-family:inherit;color:var(--text);outline:none;resize:vertical;background:#fff;min-height:80px;line-height:1.6}
+.plan-ta:focus{border-color:var(--accent)}
+.plan-status{font-size:12px;color:var(--sub);margin-top:4px;text-align:right}
+.sel-row{display:flex;gap:8px;align-items:center;margin-bottom:14px}
+.sel-row select{border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:13px;background:#fff;color:var(--text);outline:none}
+.bill-cols{display:flex;gap:14px;margin-bottom:16px}
+.bill-col{flex:1;background:var(--bg);border-radius:8px;padding:12px}
+.bill-col .col-hd{font-size:13px;font-weight:600;color:var(--sub);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.bill-col .col-hd .pl-btn{font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid var(--border);cursor:pointer;background:var(--card);color:var(--sub)}
+.bill-col .col-hd .pl-btn:active{background:var(--hover)}
+
+.pl-item{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:13px}
+.pl-item .pl-ck{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--border);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:transparent}
+.pl-item .pl-ck.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.pl-item .pl-tx{flex:1;cursor:pointer;padding:2px 4px;border-radius:4px;min-width:0}
+.pl-item .pl-tx:focus{outline:none;background:var(--card)}
+.pl-item .pl-tx.done{text-decoration:line-through;color:var(--sub)}
+.pl-item .pl-del{color:var(--sub);font-size:11px;cursor:pointer;padding:0 4px;opacity:0.5}
+.pl-item .pl-del:hover{opacity:1}
+.pl-add{display:flex;gap:4px;margin-top:4px}
+.pl-add input{flex:1;border:1px solid var(--border);border-radius:4px;padding:3px 6px;font-size:12px;outline:none;background:#fff}
+.pl-add input:focus{border-color:var(--accent)}
+.pl-add .pl-add-btn{font-size:11px;padding:2px 8px;border-radius:4px;border:1px solid var(--border);cursor:pointer;background:var(--card);color:var(--sub)}
+.empty{text-align:center;color:var(--sub);font-size:13px;padding:24px 0}
+
+</style>
+</head>
+<body>
+<div class="page">
+<div class="hd">
+  <h1>纱纱的账本</h1>
+  <div class="hd-sync" id="syncStatus" onclick="showTokenModal()">检查同步</div>
+</div>
+
+<div class="main-row" style="display:flex;gap:18px;align-items:flex-start">
+  <div class="col-l" style="flex:1;display:flex;flex-direction:column;min-width:0">
+    <div class="row3-left">
+    <div class="c c1">
+            <div class="cal-sels">
+        <input type="month" id="calYM" onchange="calSelectChange()" style="border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:13px;background:#fff;color:var(--text);outline:none;font-family:inherit">
+        <button class="btn" onclick="goToday()" style="margin-left:4px">今天</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+
+  </div>
+  
+    <div style="margin-top:18px"><div class="row4-left" style="flex:1;display:flex;flex-direction:column;min-width:0">
+    <div class="c" style="background:var(--card);border-radius:14px;padding:18px;box-shadow:0 1px 4px var(--shadow);display:flex;flex-direction:column">
+      <div class="st" style="justify-content:space-between">
+        <span>财务计划</span>
+
+      </div>
+      <div class="bill-col">
+        <div class="col-hd">当月总结 <button class="pl-btn" onclick="editSummary()">编辑</button></div>
+        <div id="summaryView" style="font-size:12px;line-height:1.6;white-space:pre-wrap;cursor:pointer" onclick="editSummary()"></div>
+        <textarea class="plan-ta" id="summaryEdit" style="display:none;min-height:60px" onblur="saveSummary()" onkeydown="if(event.key==='Enter'&&event.ctrlKey)this.blur()"></textarea>
+      </div>
+      <div class="bill-col" style="margin-top:12px">
+        <div class="col-hd">下月计划 <button class="pl-btn" onclick="addPlanItem()">+ 添加</button></div>
+        <div id="planItemsList"></div>
+      </div>
+      <div class="bill-col" style="margin-top:12px">
+        <div class="col-hd">年度总结</div>
+        <textarea class="plan-ta" id="annualSummaryTA" placeholder="在这里写年度总结…" oninput="saveAnnualSummary()" style="min-height:60px"></textarea>
+      </div>
+
+    </div>
+  </div>
+  
+  </div>
+  </div>
+  <div class="col-r" style="flex:1.5;display:flex;flex-direction:column;min-width:0">
+    <div class="row3-mid">
+    <div class="c c2">
+      <div class="st">每日账单 <span class="sub" id="ledgerDay"></span></div>
+      <div class="c2-body">
+        <div class="tbl-wrap">
+          <table class="tbl" id="ledgerTable">
+            <thead><tr><th>分类</th><th>事项</th><th style="text-align:right">金额(元)</th><th style="width:30px"></th></tr></thead>
+            <tbody id="ledgerBody"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="ledgerEmpty">暂无记录，请在下方添加</div>
+      </div>
+      <div class="add-row">
+        <input type="date" id="ldDate" style="width:130px">
+        <select id="ldCat1"><option value="支出">支出</option><option value="收入">收入</option></select>
+        <select id="ldCat2"></select>
+        <input type="text" id="ldItem" placeholder="事项" style="width:100px">
+        <input type="number" id="ldAmt" placeholder="金额" step="0.01" style="width:80px">
+        <button class="ab" onclick="addLedger()">+</button>
+      </div>
+    </div>
+  </div>
+
+
+    <div class="row4-mid" style="flex:1.5;display:flex;flex-direction:column;min-width:0;margin-top:18px">
+    <div class="c" style="background:var(--card);border-radius:14px;padding:18px;box-shadow:0 1px 4px var(--shadow)">
+  <div class="st">
+    <span>月账单</span>
+    <span class="sub" style="font-size:12px;font-weight:400">
+      收入: <span class="val in" id="mIncome">0</span>
+      &nbsp;支出: <span class="val ex" id="mExpense">0</span>
+      &nbsp;结余: <span class="val bl" id="mBalance">0</span>
+    </span>
+  </div>
+  <div class="sel-row">
+    <input type="month" id="mYM" onchange="renMonth()" style="border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:13px;background:#fff;color:var(--text);outline:none;font-family:inherit">
+  </div>
+      <div class="tbl-wrap">
+        <table class="tbl" id="monthTable">
+          <thead><tr><th>收支情况</th><th style="text-align:right">金额(元)</th></tr></thead>
+          <tbody id="monthBody"></tbody>
+        </table>
+      </div>
+    </div>
+      <div class="c" style="background:var(--card);border-radius:14px;padding:18px;box-shadow:0 1px 4px var(--shadow);margin-top:18px">
+  <div class="st">
+    <span>年账单</span>
+    <span class="sub" style="font-size:12px;font-weight:400">
+      收入: <span class="val in" id="yIncome">0</span>
+      &nbsp;支出: <span class="val ex" id="yExpense">0</span>
+      &nbsp;结余: <span class="val bl" id="yBalance">0</span>
+    </span>
+  </div>
+  <div class="sel-row">
+    <input type="number" id="yYear" onchange="renYear()" min="2020" max="2040" value="2026" style="border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:13px;background:#fff;color:var(--text);outline:none;font-family:inherit;width:100px">
+  </div>
+      <div class="tbl-wrap">
+        <table class="tbl" id="yearTable">
+          <thead><tr><th>收支情况</th><th style="text-align:right">金额(元)</th></tr></thead>
+          <tbody id="yearBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div><!-- Token Modal -->
+<div id="tokenModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.2);z-index:999;align-items:center;justify-content:center" onclick="if(event.target===this)closeTokenModal()">
+<div style="background:var(--card);border-radius:12px;padding:20px;width:340px;box-shadow:0 4px 20px rgba(0,0,0,0.1)">
+<div style="font-size:15px;font-weight:600;margin-bottom:12px">设置 GitHub Token</div>
+<div style="font-size:11px;color:var(--sub);margin-bottom:8px">用于多设备数据同步，需 <code>repo</code> 权限</div>
+<input id="tokenInp" type="password" style="width:100%;border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;outline:none;background:#fff;margin-bottom:10px" placeholder="ghp_xxxxxxxxxxxx">
+<div style="display:flex;gap:8px;justify-content:flex-end">
+<button class="btn" onclick="closeTokenModal()">取消</button>
+<button class="btn ac" onclick="saveToken()">保存</button>
+</div>
+</div></div>
+
+<script>
+// ===== Config =====
+const GITHUB_OWNER = 'SallyLulu';
+const GITHUB_REPO = 'schedule';
+const DATA_FILE = 'finance_data.json';
+const STORAGE_KEY = 'sasha_finance';
+
+// ===== Category data =====
+const EXPENSE_SUB = ['日用','水电','交通','医疗','衣物','房租','食物','水果','零食','图书','艺术','手工','演出'];
+const INCOME_SUB = ['工资','出二手','红包','其他'];
+const CAT1 = ['支出','收入'];
+const WEEK_DAYS = ['日','一','二','三','四','五','六'];
+
+// ===== State =====
+let curY, curM, selDate;
+let ledgerCache = {};
+
+// ===== Storage =====
+function getCD() {
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e){}
+  if (!d || !d.version) {
+    d = { ledger: {}, plans: { summary: {}, nextPlan: {}, planItems: {} }, annualSummary: {}, version: Date.now() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+  }
+  return d;
+}
+function putCD(d) {
+  d.version = Date.now();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+  schedSync();
+}
+function getLedger() { return getCD().ledger || {}; }
+function putLedger(d) { var c = getCD(); c.ledger = d; putCD(c); }
+function getPlans() { return getCD().plans || { summary:{}, nextPlan:{}, planItems:{} }; }
+function putPlans(d) { var c = getCD(); c.plans = d; putCD(c); }
+
+// ===== GitHub Sync =====
+function getGitHubToken() { return localStorage.getItem('sasha_finance_token') || ''; }
+function showSync(st, msg) {
+  var el = document.getElementById('syncStatus');
+  el.textContent = msg;
+  el.style.color = st==='ok' ? 'var(--income)' : st==='er' ? 'var(--expense)' : 'var(--sub)';
+}
+function showTokenModal() {
+  document.getElementById('tokenModal').style.display = 'flex';
+  document.getElementById('tokenInp').value = getGitHubToken();
+}
+function closeTokenModal() { document.getElementById('tokenModal').style.display = 'none'; }
+function saveToken() {
+  var t = document.getElementById('tokenInp').value.trim();
+  localStorage.setItem('sasha_finance_token', t);
+  closeTokenModal();
+  doSync();
+}
+async function loadFromGitHub() {
+  var t = getGitHubToken();
+  if (!t) return null;
+  var url = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + DATA_FILE;
+  try {
+    var r = await fetch(url, { headers: { 'Authorization': 'token ' + t } });
+    if (r.status === 404) return null;
+    if (!r.ok) throw Error('');
+    var info = await r.json();
+    return JSON.parse(decodeURIComponent(escape(atob(info.content.replace(/\s/g, '')))));
+  } catch(e) { return null; }
+}
+async function doSync() {
+  var cd = getCD();
+  var t = getGitHubToken();
+  if (!t) { showSync('sy', '未设置 Token'); return; }
+  showSync('sy', '同步中…');
+  var url = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + DATA_FILE;
+  try {
+    var sha = null;
+    var gr = await fetch(url, { headers: { 'Authorization': 'token ' + t } });
+    if (gr.ok) { var gi = await gr.json(); sha = gi.sha; }
+    var jsonStr = JSON.stringify(cd, null, 2);
+    var content = btoa(unescape(encodeURIComponent(jsonStr)));
+    var pr = await fetch(url, {
+      method: 'PUT', headers: { 'Authorization': 'token ' + t, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'sync finance data', content: content, sha: sha })
+    });
+    if (pr.ok) showSync('ok', '已同步');
+    else showSync('er', '同步失败');
+  } catch(e) { showSync('er', '网络错误'); }
+}
+let _syncTimer = null;
+function schedSync() {
+  if (_syncTimer) clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(function() { doSync(); }, 2000);
+}
+
+// ===== Date helpers =====
+function fmtD(y,m,d) { return y+'-'+(m<10?'0':'')+m+'-'+(d<10?'0':'')+d; }
+function getTStr() { var n=new Date(); return fmtD(n.getFullYear(),n.getMonth()+1,n.getDate()); }
+function getMon(d) { var dt=new Date(d); var day=dt.getDay()||7; dt.setDate(dt.getDate()-day+1); return dt; }
+function addD(d,n) { var r=new Date(d); r.setDate(r.getDate()+n); return r; }
+function getDS(d,off) { var dt=new Date(d); dt.setDate(dt.getDate()+off); return fmtD(dt.getFullYear(),dt.getMonth()+1,dt.getDate()); }
+function getMD(y,m) { var days=[],ld=new Date(y,m,0).getDate(); for(var d=1;d<=ld;d++) days.push(fmtD(y,m,d)); return days; }
+function getWeekDates(ds) {
+  var m=getMon(new Date(ds)), days=[];
+  for(var i=0;i<7;i++){var d=addD(m,i);days.push(fmtD(d.getFullYear(),d.getMonth()+1,d.getDate()));}
+  return days;
+}
+
+// ===== Calendar =====
+function renderCal() {
+  var grid = document.getElementById('calGrid');
+  var h = '<div class="dn">一</div><div class="dn">二</div><div class="dn">三</div><div class="dn">四</div><div class="dn">五</div><div class="dn">六</div><div class="dn">日</div>';
+  var first = new Date(curY, curM-1, 1);
+  var startPad = first.getDay() || 7; startPad--;
+  var days = getMD(curY, curM);
+  var today = getTStr();
+  for (var i=0; i<startPad; i++) h += '<div class="dc om"></div>';
+  days.forEach(function(ds){
+    var d = parseInt(ds.split('-')[2]);
+    var cls = 'dc';
+    if (ds === selDate) cls += ' sel';
+    else if (ds === today) cls += ' td';
+    h += '<div class="'+cls+'" onclick="selDay(\''+ds+'\')">'+d+'</div>';
+  });
+  grid.innerHTML = h;
+}
+
+function initCalSelects() {
+  var inp = document.getElementById('calYM');
+  var ym = curY + '-' + (curM < 10 ? '0' : '') + curM;
+  inp.value = ym;
+}
+function calSelectChange() {
+  var v = document.getElementById('calYM').value;
+  if (!v) return;
+  var p = v.split('-');
+  curY = parseInt(p[0]); curM = parseInt(p[1]);
+  renderCal();
+}
+function chgM(d) {
+  curM += d;
+  if (curM < 1) { curM = 12; curY--; }
+  if (curM > 12) { curM = 1; curY++; }
+  renderCal();
+}
+function goToday() {
+  var n = new Date();
+  curY = n.getFullYear(); curM = n.getMonth() + 1;
+  selDate = getTStr();
+  var ym = curY + '-' + (curM < 10 ? '0' : '') + curM;
+  document.getElementById('calYM').value = ym;
+  renderCal();
+  renLedger();
+  renMonth();
+  renYear();
+}
+
+// ===== Ledger (每日账单) =====
+function initCat2() {
+  var sel = document.getElementById('ldCat2');
+  var h = '';
+  EXPENSE_SUB.forEach(function(c){ h += '<option value="'+c+'">'+c+'</option>'; });
+  sel.innerHTML = h;
+}
+document.getElementById('ldCat1').onchange = function() {
+  var sel = document.getElementById('ldCat2');
+  var cat1 = this.value;
+  var list = cat1 === '支出' ? EXPENSE_SUB : INCOME_SUB;
+  var h = '';
+  list.forEach(function(c){ h += '<option value="'+c+'">'+c+'</option>'; });
+  sel.innerHTML = h;
+};
+
+function addLedger() {
+  var date = document.getElementById('ldDate').value;
+  var cat1 = document.getElementById('ldCat1').value;
+  var cat2 = document.getElementById('ldCat2').value;
+  var item = document.getElementById('ldItem').value.trim();
+  var amt = parseFloat(document.getElementById('ldAmt').value);
+  if (!date || !item || isNaN(amt) || amt <= 0) return;
+  var data = getLedger();
+  if (!data[date]) data[date] = [];
+  data[date].push({ cat1: cat1, cat2: cat2, item: item, amount: amt });
+  putLedger(data);
+  document.getElementById('ldItem').value = '';
+  document.getElementById('ldAmt').value = '';
+  renLedger();
+  renMonth();
+  renYear();
+}
+
+function delLedger(date, idx) {
+  var data = getLedger();
+  if (data[date]) {
+    data[date].splice(idx, 1);
+    if (data[date].length === 0) delete data[date];
+    putLedger(data);
+    renLedger();
+    renMonth();
+    renYear();
+  }
+}
+
+function getWeekKey() {
+  var m = getMon(new Date(selDate));
+  return fmtD(m.getFullYear(), m.getMonth()+1, m.getDate());
+}
+function getFullWeekLabel(ds) {
+  var m = getMon(new Date(ds));
+  var end = addD(m, 6);
+  return (m.getMonth()+1)+'/'+m.getDate()+' - '+(end.getMonth()+1)+'/'+end.getDate();
+}
+
+function renLedger() {
+  var ds = selDate;
+  document.getElementById('ledgerDay').textContent = ds;
+  var data = getLedger();
+  var items = [];
+  (data[ds]||[]).forEach(function(t, i){ items.push({ date: ds, idx: i, cat1: t.cat1, cat2: t.cat2, item: t.item, amount: t.amount }); });
+  var tbody = document.getElementById('ledgerBody');
+  var empty = document.getElementById('ledgerEmpty');
+  if (items.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  var h = '';
+  items.forEach(function(t){
+    var cls = t.cat1 === '收入' ? 'in' : 'ex';
+    h += '<tr><td class="'+cls+'">'+t.cat2+'</td><td>'+esc(t.item)+'</td><td style="text-align:right" class="'+cls+'">'+t.amount.toFixed(2)+'</td>';
+    h += '<td style="text-align:center"><span style="cursor:pointer;color:var(--sub);font-size:10px" onclick="delLedger(\''+ds+'\','+t.idx+')">✕</span></td></tr>';
+  });
+  tbody.innerHTML = h;
+}
+
+// ===== Month bill =====
+function initMonthYear() {
+  var inp = document.getElementById('mYM');
+  var ym = curY + '-' + (curM < 10 ? '0' : '') + curM;
+  inp.value = ym;
+}
+
+function renMonth() {
+  var v = document.getElementById('mYM').value;
+  if (!v) return;
+  var p = v.split('-');
+  var y = parseInt(p[0]); var m = parseInt(p[1]);
+  var data = getLedger();
+  var totals = {};
+
+  var days = getMD(y, m);
+  days.forEach(function(ds){
+    (data[ds]||[]).forEach(function(t){
+      if (!totals[t.cat2]) totals[t.cat2] = 0;
+      totals[t.cat2] += t.amount;
+    });
+  });
+
+  // Calculate totals
+  var incomeTotal = 0, expenseTotal = 0;
+  INCOME_SUB.forEach(function(c){ if (totals[c]) incomeTotal += totals[c]; });
+  EXPENSE_SUB.forEach(function(c){ if (totals[c]) expenseTotal += totals[c]; });
+
+  document.getElementById('mIncome').textContent = incomeTotal.toFixed(2);
+  document.getElementById('mExpense').textContent = expenseTotal.toFixed(2);
+  document.getElementById('mBalance').textContent = (incomeTotal - expenseTotal).toFixed(2);
+
+  var tbody = document.getElementById('monthBody');
+  var h = '<tr class="sum-row"><td>收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
+  INCOME_SUB.forEach(function(c){
+    var v = totals[c] || 0;
+    if (v > 0) h += '<tr><td style="padding-left:20px;color:var(--income)">'+c+'</td><td style="text-align:right;color:var(--income)">'+v.toFixed(2)+'</td></tr>';
+  });
+  h += '<tr class="sum-row"><td>支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
+  EXPENSE_SUB.forEach(function(c){
+    var v = totals[c] || 0;
+    if (v > 0) h += '<tr><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
+  });
+  tbody.innerHTML = h;
+
+  // Render monthly summary & plan
+  renMonthPlan(y, m);
+}
+
+// ===== Monthly summary & plan =====
+function getMonthKey(y,m) { return y+'-'+(m<10?'0':'')+m; }
+
+function renMonthPlan(y, m) {
+  var key = getMonthKey(y, m);
+  var plans = getPlans();
+
+  // Summary
+  var summary = plans.summary[key] || '';
+  document.getElementById('summaryView').textContent = summary || '点击编辑当月总结…';
+  document.getElementById('summaryView').style.color = summary ? 'var(--text)' : 'var(--sub)';
+  document.getElementById('summaryEdit').value = summary;
+
+  // Plan items
+  var items = plans.planItems[key] || [];
+  renderPlanItems(key, items);
+}
+
+function editSummary() {
+  document.getElementById('summaryView').style.display = 'none';
+  var ta = document.getElementById('summaryEdit');
+  ta.style.display = 'block';
+  ta.focus();
+}
+
+function saveSummary() {
+  var v = document.getElementById('mYM').value;
+  if (!v) return;
+  var p = v.split('-');
+  var y = parseInt(p[0]); var m = parseInt(p[1]);
+  var key = getMonthKey(y, m);
+  var plans = getPlans();
+  plans.summary[key] = document.getElementById('summaryEdit').value;
+  putPlans(plans);
+  document.getElementById('summaryEdit').style.display = 'none';
+  document.getElementById('summaryView').style.display = 'block';
+  renMonthPlan(y, m);
+}
+
+function addPlanItem() {
+  var v = document.getElementById('mYM').value;
+  if (!v) return;
+  var p = v.split('-');
+  var y = parseInt(p[0]); var m = parseInt(p[1]);
+  var key = getMonthKey(y, m);
+  var plans = getPlans();
+  if (!plans.planItems[key]) plans.planItems[key] = [];
+  plans.planItems[key].push({ text: '新计划项', done: false });
+  putPlans(plans);
+  renderPlanItems(key, plans.planItems[key]);
+}
+
+function togglePlanItem(key, idx) {
+  var plans = getPlans();
+  if (plans.planItems[key] && plans.planItems[key][idx]) {
+    plans.planItems[key][idx].done = !plans.planItems[key][idx].done;
+    putPlans(plans);
+    renderPlanItems(key, plans.planItems[key]);
+  }
+}
+
+function delPlanItem(key, idx) {
+  var plans = getPlans();
+  if (plans.planItems[key]) {
+    plans.planItems[key].splice(idx, 1);
+    putPlans(plans);
+    renderPlanItems(key, plans.planItems[key]);
+  }
+}
+
+function editPlanText(key, idx, el) {
+  var old = el.textContent;
+  var inp = document.createElement('input');
+  inp.type = 'text'; inp.value = old;
+  inp.style.cssText = 'flex:1;border:1px solid var(--accent);border-radius:4px;padding:2px 4px;font-size:12px;background:#fff;outline:none';
+  el.parentNode.replaceChild(inp, el);
+  inp.focus(); inp.select();
+  function save() {
+    var v = inp.value.trim();
+    var plans = getPlans();
+    if (plans.planItems[key] && plans.planItems[key][idx]) plans.planItems[key][idx].text = v || old;
+    putPlans(plans);
+    renderPlanItems(key, plans.planItems[key]);
+  }
+  inp.onkeydown = function(e) { if (e.key === 'Enter') { e.preventDefault(); save(); } };
+  inp.onblur = save;
+}
+
+function renderPlanItems(key, items) {
+  var el = document.getElementById('planItemsList');
+  if (!items || items.length === 0) {
+    el.innerHTML = '<div style="font-size:11px;color:var(--sub);padding:6px 0">点击"添加"写下计划</div>';
+    return;
+  }
+  var h = '';
+  items.forEach(function(it, i){
+    h += '<div class="pl-item">';
+    h += '<div class="pl-ck'+(it.done?' done':'')+'" onclick="togglePlanItem(\''+key+'\','+i+')">'+(it.done?'✓':'')+'</div>';
+    h += '<span class="pl-tx'+(it.done?' done':'')+'" onclick="editPlanText(\''+key+'\','+i+',this)">'+esc(it.text)+'</span>';
+    h += '<span class="pl-del" onclick="delPlanItem(\''+key+'\','+i+')">✕</span>';
+    h += '</div>';
+  });
+  el.innerHTML = h;
+}
+
+// ===== Year bill =====
+function initYearYear() {
+  document.getElementById('yYear').value = curY;
+}
+
+function renYear() {
+  var y = parseInt(document.getElementById('yYear').value);
+  var data = getLedger();
+  var totals = {};
+  for (var m = 1; m <= 12; m++) {
+    var days = getMD(y, m);
+    days.forEach(function(ds){
+      (data[ds]||[]).forEach(function(t){
+        if (!totals[t.cat2]) totals[t.cat2] = 0;
+        totals[t.cat2] += t.amount;
+      });
+    });
+  }
+
+  var incomeTotal = 0, expenseTotal = 0;
+  INCOME_SUB.forEach(function(c){ if (totals[c]) incomeTotal += totals[c]; });
+  EXPENSE_SUB.forEach(function(c){ if (totals[c]) expenseTotal += totals[c]; });
+
+  document.getElementById('yIncome').textContent = incomeTotal.toFixed(2);
+  document.getElementById('yExpense').textContent = expenseTotal.toFixed(2);
+  document.getElementById('yBalance').textContent = (incomeTotal - expenseTotal).toFixed(2);
+
+  var tbody = document.getElementById('yearBody');
+  var h = '<tr class="sum-row"><td>收入</td><td style="text-align:right;color:var(--income)">'+incomeTotal.toFixed(2)+'</td></tr>';
+  INCOME_SUB.forEach(function(c){
+    var v = totals[c] || 0;
+    if (v > 0) h += '<tr><td style="padding-left:20px;color:var(--income)">'+c+'</td><td style="text-align:right;color:var(--income)">'+v.toFixed(2)+'</td></tr>';
+  });
+  h += '<tr class="sum-row"><td>支出</td><td style="text-align:right;color:var(--expense)">'+expenseTotal.toFixed(2)+'</td></tr>';
+  EXPENSE_SUB.forEach(function(c){
+    var v = totals[c] || 0;
+    if (v > 0) h += '<tr><td style="padding-left:20px;color:var(--expense)">'+c+'</td><td style="text-align:right;color:var(--expense)">'+v.toFixed(2)+'</td></tr>';
+  });
+  tbody.innerHTML = h;
+  // Load annual summary
+  var c = getCD();
+  var ta = document.getElementById('annualSummaryTA');
+  if (c.annualSummary && c.annualSummary[y] !== undefined) {
+    ta.value = c.annualSummary[y];
+  } else {
+    ta.value = '';
+  }
+}
+
+// ===== Annual Summary =====
+function saveAnnualSummary() {
+  var y = parseInt(document.getElementById('yYear').value);
+  var c = getCD();
+  if (!c.annualSummary) c.annualSummary = {};
+  c.annualSummary[y] = document.getElementById('annualSummaryTA').value;
+  putCD(c);
+}
+
+// ===== Plan (Card 3 - Financial Plan) =====
+
+
+
+// ===== Utils =====
+function esc(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ===== Init =====
+function init() {
+  var n = new Date();
+  curY = n.getFullYear(); curM = n.getMonth() + 1;
+  selDate = getTStr();
+
+  // Set date input default
+  document.getElementById('ldDate').value = selDate;
+
+  initCalSelects();
+  initCat2();
+  initMonthYear();
+  initYearYear();
+
+  // Set month/year selectors
+  var ym = curY + '-' + (curM < 10 ? '0' : '') + curM;
+  document.getElementById('mYM').value = ym;
+  document.getElementById('yYear').value = curY;
+
+  renderCal();
+  renLedger();
+  renMonth();
+  renYear();
+
+  // Try load from GitHub
+  loadFromGitHub().then(function(cd){
+    if (cd && cd.version) {
+      var local = getCD();
+      if (cd.version > local.version) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cd));
+        ledgerCache = {};
+        renLedger(); renMonth(); renYear();
+        showSync('ok', '已同步');
+      } else {
+        showSync('ok', '已同步');
+      }
+    } else if (!getGitHubToken()) {
+      showSync('sy', '设置 Token');
+    } else {
+      showSync('ok', '本地');
+    }
+  }).catch(function(){ showSync('er', '网络错误'); });
+}
+
+function selDay(ds) {
+  selDate = ds;
+  document.getElementById('ldDate').value = ds;
+  var p = ds.split('-');
+  curY = parseInt(p[0]); curM = parseInt(p[1]);
+  var ym = curY + '-' + (curM < 10 ? '0' : '') + curM;
+  document.getElementById('calYM').value = ym;
+  var ym = curY + '-' + (curM < 10 ? '0' : '') + curM;
+  document.getElementById('mYM').value = ym;
+  document.getElementById('yYear').value = curY;
+  renderCal();
+  renLedger();
+  renMonth();
+  renYear();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
