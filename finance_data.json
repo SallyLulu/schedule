@@ -77,6 +77,14 @@
         "item": "salary",
         "amount": 9736.38
       }
+    ],
+    "2026-07-25": [
+      {
+        "cat1": "支出",
+        "cat2": "食物",
+        "item": "dinner",
+        "amount": 21.9
+      }
     ]
   },
   "plans": {
@@ -100,5 +108,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1785487551992
+  "version": 1785487561953
 }
