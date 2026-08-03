@@ -687,7 +687,7 @@
   },
   "plans": {
     "summary": {
-      "2026-07": ""
+      "2026-07": "较大支出：\n言长工作坊1899\nmidjourney年费653.6"
     },
     "nextPlan": {},
     "planItems": {
@@ -706,5 +706,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1785728278145
+  "version": 1785728415605
 }
