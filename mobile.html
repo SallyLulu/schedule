@@ -299,6 +299,7 @@ async function loadFromGitHub() {
   try {
     var r = await fetch(url, { headers: { 'Authorization': 'token ' + t } });
     if (r.status === 404) return null;
+    if (r.status === 401) { localStorage.removeItem('sasha_finance_token'); return null; }
     if (!r.ok) throw Error('');
     var info = await r.json();
     return JSON.parse(decodeURIComponent(escape(atob(info.content.replace(/\s/g, '')))));
