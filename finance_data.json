@@ -1274,6 +1274,12 @@
         "cat2": "食物",
         "item": "dinner",
         "amount": 27.8
+      },
+      {
+        "cat1": "收入",
+        "cat2": "出二手",
+        "item": "book",
+        "amount": 55
       }
     ]
   },
@@ -1313,5 +1319,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1787546831041
+  "version": 1787546844538
 }
