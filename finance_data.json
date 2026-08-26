@@ -1501,11 +1501,11 @@
         },
         {
           "text": "8.22 魔都手账集市 100",
-          "done": false
+          "done": true
         },
         {
           "text": "印台：银色",
-          "done": false
+          "done": true
         }
       ]
     }
@@ -1513,5 +1513,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1787727675606
+  "version": 1787727737494
 }
