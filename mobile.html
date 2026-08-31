@@ -255,6 +255,17 @@ let curY, curM, selDate;
 let ledgerCache = {};
 
 // ===== Storage =====
+function isEmptyData(d) {
+  if (!d) return true;
+  if (d.ledger && Object.keys(d.ledger).length > 0) return false;
+  if (d.plans) {
+    if (d.plans.summary && Object.keys(d.plans.summary).length > 0) return false;
+    if (d.plans.planItems && Object.keys(d.plans.planItems).length > 0) return false;
+    if (d.plans.nextPlan && Object.keys(d.plans.nextPlan).length > 0) return false;
+  }
+  if (d.annualSummary && Object.keys(d.annualSummary).length > 0) return false;
+  return true;
+}
 function getCD() {
   let d = null;
   try { d = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e){}
@@ -744,8 +755,10 @@ function init() {
         ledgerCache = {};
         renLedger(); renMonth(); renYear();
         showSync('ok', '已同步');
-      } else {
+      } else if (!isEmptyData(local)) {
         doSync();
+      } else {
+        showSync('ok', '已同步');
       }
     } else if (!getGitHubToken()) {
       showSync('sy', '设置 Token');
