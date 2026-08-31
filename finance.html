@@ -297,6 +297,7 @@ async function doSync() {
     var sha = null;
     var gr = await fetch(url, { headers: { 'Authorization': 'token ' + t } });
     if (gr.ok) { var gi = await gr.json(); sha = gi.sha; }
+    else if (gr.status === 401) { localStorage.removeItem('sasha_finance_token'); showSync('er', 'Token失效'); return; }
     var jsonStr = JSON.stringify(cd, null, 2);
     var content = btoa(unescape(encodeURIComponent(jsonStr)));
     var pr = await fetch(url, {
@@ -304,6 +305,7 @@ async function doSync() {
       body: JSON.stringify({ message: 'sync finance data', content: content, sha: sha })
     });
     if (pr.ok) showSync('ok', '已同步');
+    else if (pr.status === 401) { localStorage.removeItem('sasha_finance_token'); showSync('er', 'Token失效'); }
     else showSync('er', '同步失败');
   } catch(e) { showSync('er', '网络错误'); }
 }
@@ -725,7 +727,7 @@ function init() {
         renLedger(); renMonth(); renYear();
         showSync('ok', '已同步');
       } else {
-        showSync('ok', '已同步');
+        doSync();
       }
     } else if (!getGitHubToken()) {
       showSync('sy', '设置 Token');
