@@ -1536,6 +1536,12 @@
         "cat2": "零食",
         "item": "ice cream",
         "amount": 39.4
+      },
+      {
+        "cat1": "支出",
+        "cat2": "食物",
+        "item": "dinner",
+        "amount": 25.87
       }
     ]
   },
@@ -1567,5 +1573,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1788233088012
+  "version": 1788233098860
 }
