@@ -1778,6 +1778,12 @@
         "cat2": "食物",
         "item": "lunch",
         "amount": 16.9
+      },
+      {
+        "cat1": "支出",
+        "cat2": "交通",
+        "item": "subway",
+        "amount": 4.71
       }
     ]
   },
@@ -1810,5 +1816,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1788751191826
+  "version": 1788751223490
 }
