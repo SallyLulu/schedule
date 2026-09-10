@@ -323,10 +323,32 @@ async function doSync() {
   showSync('sy', '同步中…');
   var url = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + DATA_FILE;
   try {
-    var sha = null;
+    var sha = null, remote = null;
     var gr = await fetch(url, { headers: { 'Authorization': 'token ' + t } });
-    if (gr.ok) { var gi = await gr.json(); sha = gi.sha; }
+    if (gr.ok) {
+      var gi = await gr.json();
+      sha = gi.sha;
+      remote = JSON.parse(decodeURIComponent(escape(atob(gi.content.replace(/\s/g, '')))));
+    }
     else if (gr.status === 401) { localStorage.removeItem('sasha_finance_token'); showSync('er', 'Token失效'); return; }
+    else if (gr.status === 404) { /* 云端无文件，直接上传 */ }
+    else { showSync('er', '同步失败'); return; }
+    // 上传前比较：防空数据/旧数据覆盖云端更新的数据
+    var localEmpty = isEmptyData(cd);
+    if (remote && remote.version) {
+      var remoteEmpty = isEmptyData(remote);
+      if (!remoteEmpty && (localEmpty || remote.version > cd.version)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(remote));
+        ledgerCache = {};
+        renLedger(); renMonth(); renYear();
+        showSync('ok', '已同步');
+        return;
+      }
+      if (remoteEmpty && localEmpty) {
+        showSync('ok', '已同步');
+        return;
+      }
+    }
     var jsonStr = JSON.stringify(cd, null, 2);
     var content = btoa(unescape(encodeURIComponent(jsonStr)));
     var pr = await fetch(url, {
@@ -751,19 +773,30 @@ function init() {
     if (cd && cd.version) {
       var local = getCD();
       var localEmpty = isEmptyData(local);
-      if (localEmpty && !isEmptyData(cd)) {
+      var remoteEmpty = isEmptyData(cd);
+      if (localEmpty && !remoteEmpty) {
+        // 本地空、云端有数据：采用云端
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cd));
         ledgerCache = {};
         renLedger(); renMonth(); renYear();
         showSync('ok', '已同步');
-      } else if (cd.version > local.version) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(cd));
-        ledgerCache = {};
-        renLedger(); renMonth(); renYear();
-        showSync('ok', '已同步');
-      } else if (!localEmpty) {
+      } else if (!localEmpty && remoteEmpty) {
+        // 本地有数据、云端空：推送到云端
         doSync();
+      } else if (!localEmpty && !remoteEmpty) {
+        // 两侧都有数据：比较版本
+        if (cd.version > local.version) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(cd));
+          ledgerCache = {};
+          renLedger(); renMonth(); renYear();
+          showSync('ok', '已同步');
+        } else if (cd.version < local.version) {
+          doSync();
+        } else {
+          showSync('ok', '已同步');
+        }
       } else {
+        // 两侧都空：不互相覆盖
         showSync('ok', '已同步');
       }
     } else if (!getGitHubToken()) {
