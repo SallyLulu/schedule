@@ -270,7 +270,7 @@ function getCD() {
   let d = null;
   try { d = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e){}
   if (!d || !d.version) {
-    d = { ledger: {}, plans: { summary: {}, nextPlan: {}, planItems: {} }, annualSummary: {}, version: Date.now() };
+    d = { ledger: {}, plans: { summary: {}, nextPlan: {}, planItems: {} }, annualSummary: {}, version: 1 };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
   }
   return d;
@@ -750,12 +750,18 @@ function init() {
   loadFromGitHub().then(function(cd){
     if (cd && cd.version) {
       var local = getCD();
-      if (cd.version > local.version) {
+      var localEmpty = isEmptyData(local);
+      if (localEmpty && !isEmptyData(cd)) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cd));
         ledgerCache = {};
         renLedger(); renMonth(); renYear();
         showSync('ok', '已同步');
-      } else if (!isEmptyData(local)) {
+      } else if (cd.version > local.version) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cd));
+        ledgerCache = {};
+        renLedger(); renMonth(); renYear();
+        showSync('ok', '已同步');
+      } else if (!localEmpty) {
         doSync();
       } else {
         showSync('ok', '已同步');
