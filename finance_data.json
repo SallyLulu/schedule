@@ -3034,6 +3034,12 @@
         "cat2": "食物",
         "item": "dinner",
         "amount": 13
+      },
+      {
+        "cat1": "支出",
+        "cat2": "食物",
+        "item": "food",
+        "amount": 15
       }
     ]
   },
@@ -3077,5 +3083,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789094501478
+  "version": 1789094507694
 }
