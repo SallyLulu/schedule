@@ -3644,6 +3644,12 @@
         "cat2": "交通",
         "item": "subway",
         "amount": 26.5
+      },
+      {
+        "cat1": "支出",
+        "cat2": "零食",
+        "item": "ice cream",
+        "amount": 1.9
       }
     ]
   },
@@ -3687,5 +3693,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789096028948
+  "version": 1789096040165
 }
