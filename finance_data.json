@@ -2336,6 +2336,12 @@
         "cat2": "食物",
         "item": "dinner",
         "amount": 20
+      },
+      {
+        "cat1": "支出",
+        "cat2": "交通",
+        "item": "texi",
+        "amount": 75
       }
     ]
   },
@@ -2379,5 +2385,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789092387688
+  "version": 1789092395666
 }
