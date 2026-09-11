@@ -3087,6 +3087,14 @@
         "item": "family new year",
         "amount": 3370.6
       }
+    ],
+    "2026-02-20": [
+      {
+        "cat1": "支出",
+        "cat2": "零食",
+        "item": "ice cream",
+        "amount": 25
+      }
     ]
   },
   "plans": {
@@ -3129,5 +3137,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789094636910
+  "version": 1789094679405
 }
