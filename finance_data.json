@@ -3027,6 +3027,14 @@
         "item": "subway",
         "amount": 8
       }
+    ],
+    "2026-02-15": [
+      {
+        "cat1": "支出",
+        "cat2": "食物",
+        "item": "dinner",
+        "amount": 13
+      }
     ]
   },
   "plans": {
@@ -3069,5 +3077,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789094487886
+  "version": 1789094501478
 }
