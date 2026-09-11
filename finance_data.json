@@ -3470,6 +3470,12 @@
         "cat2": "水果",
         "item": "fruit",
         "amount": 5
+      },
+      {
+        "cat1": "支出",
+        "cat2": "零食",
+        "item": "ice cream",
+        "amount": 1.9
       }
     ]
   },
@@ -3513,5 +3519,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789095702117
+  "version": 1789095711174
 }
