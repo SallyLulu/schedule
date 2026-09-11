@@ -3376,6 +3376,12 @@
         "cat2": "食物",
         "item": "dinner",
         "amount": 23
+      },
+      {
+        "cat1": "支出",
+        "cat2": "日用",
+        "item": "tmall",
+        "amount": 88.54
       }
     ]
   },
@@ -3419,5 +3425,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789095539348
+  "version": 1789095549373
 }
