@@ -3572,6 +3572,12 @@
         "cat2": "日用",
         "item": "88vip",
         "amount": 88
+      },
+      {
+        "cat1": "支出",
+        "cat2": "零食",
+        "item": "ice cream",
+        "amount": 1.9
       }
     ]
   },
@@ -3615,5 +3621,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789095895340
+  "version": 1789095904404
 }
