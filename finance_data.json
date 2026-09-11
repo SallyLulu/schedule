@@ -3079,6 +3079,14 @@
         "item": "food",
         "amount": 6.9
       }
+    ],
+    "2026-02-17": [
+      {
+        "cat1": "收入",
+        "cat2": "红包",
+        "item": "family new year",
+        "amount": 3370.6
+      }
     ]
   },
   "plans": {
@@ -3121,5 +3129,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789094598110
+  "version": 1789094636910
 }
