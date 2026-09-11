@@ -2310,6 +2310,12 @@
         "cat2": "食物",
         "item": "lunch",
         "amount": 18.5
+      },
+      {
+        "cat1": "支出",
+        "cat2": "零食",
+        "item": "ice cream",
+        "amount": 1.84
       }
     ]
   },
@@ -2353,5 +2359,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789092338760
+  "version": 1789092348488
 }
