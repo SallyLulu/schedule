@@ -3364,6 +3364,12 @@
         "cat2": "零食",
         "item": "yogurt",
         "amount": 9
+      },
+      {
+        "cat1": "支出",
+        "cat2": "零食",
+        "item": "ice cream",
+        "amount": 3
       }
     ]
   },
@@ -3407,5 +3413,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789095526709
+  "version": 1789095532108
 }
