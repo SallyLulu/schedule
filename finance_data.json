@@ -3331,6 +3331,14 @@
         "item": "dinner",
         "amount": 16
       }
+    ],
+    "2026-03-06": [
+      {
+        "cat1": "支出",
+        "cat2": "食物",
+        "item": "dinner",
+        "amount": 18
+      }
     ]
   },
   "plans": {
@@ -3373,5 +3381,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789095458845
+  "version": 1789095465268
 }
