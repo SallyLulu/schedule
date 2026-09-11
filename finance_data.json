@@ -3532,6 +3532,12 @@
         "cat2": "水果",
         "item": "fruit",
         "amount": 5
+      },
+      {
+        "cat1": "支出",
+        "cat2": "食物",
+        "item": "food",
+        "amount": 22.2
       }
     ]
   },
@@ -3575,5 +3581,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789095834220
+  "version": 1789095842421
 }
