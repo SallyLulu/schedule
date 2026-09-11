@@ -2399,32 +2399,6 @@
         "item": "dinner",
         "amount": 10
       }
-    ],
-    "2026-01-22": [
-      {
-        "cat1": "支出",
-        "cat2": "食物",
-        "item": "dinner",
-        "amount": 10
-      },
-      {
-        "cat1": "支出",
-        "cat2": "图书",
-        "item": "不熟",
-        "amount": 52
-      },
-      {
-        "cat1": "支出",
-        "cat2": "食物",
-        "item": "lunch",
-        "amount": 18.8
-      },
-      {
-        "cat1": "支出",
-        "cat2": "食物",
-        "item": "盒马",
-        "amount": 91.68
-      }
     ]
   },
   "plans": {
@@ -2467,5 +2441,5 @@
   "annualSummary": {
     "2026": ""
   },
-  "version": 1789092563400
+  "version": 1789092586728
 }
